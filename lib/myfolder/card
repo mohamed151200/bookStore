@@ -1,0 +1,135 @@
+import 'package:book_store7/old/Drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'authors.dart';
+import 'myBar.dart';
+
+
+
+
+class books extends StatefulWidget {
+  @override
+  State<books> createState() => _booksState();
+}
+
+class _booksState extends State<books> {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return
+      DefaultTabController(length: 3,
+
+        child: Scaffold(drawer: myDrawer(),
+        // Drawer(child: ListView(
+        //   children: [
+        //     UserAccountsDrawerHeader(accountName:Text("Mohamed Khaled"), accountEmail:Text("Zamalkawy4Ever") ,currentAccountPicture: CircleAvatar(),),
+        //   ListTile(onTap: (){
+        //     Navigator.push(
+        //         context, MaterialPageRoute(
+        //         builder: (context) =>
+        //             authors()
+        //
+        //     )
+        //
+        //     );},
+        //     trailing:Icon(Icons.person),title:Text("Authors",style:  GoogleFonts.caveat(fontSize: 30,color:Color(0xff77094E) ),), ),ListTile(onTap: (){
+        //       Navigator.push(
+        //           context, MaterialPageRoute(
+        //           builder: (context) =>
+        //               books()
+        //
+        //       )
+        //
+        //       );},trailing:Icon(Icons.book),title:Text("All Books",style:  GoogleFonts.caveat(fontSize: 30),), )
+        //
+        //   ],
+        // ),),
+
+          appBar:
+          AppBar(
+  backgroundColor:Color(0xff77094E) ,
+             title: Row(
+             children: [SizedBox(width:30,),
+
+               Text("All books",style:  GoogleFonts.caveat(fontSize: 50),),
+             ],
+           ),
+           )
+
+            // actions: [CircleAvatar(),SizedBox(width: 10,)],
+          //
+
+        ,  body: FutureBuilder(
+
+              future:
+              FirebaseFirestore.instance.collection("books").get(),
+
+              builder: (context, AsyncSnapshot snapshot) {
+
+                if (snapshot.hasData==false)
+                  return Center(child: CircularProgressIndicator());
+
+                else {
+                  return
+
+                    Center(
+                      child: Container(width: 200,
+                        child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, i) {
+
+                              return
+
+
+
+                                    Container(
+                                      // color: Colors.grey,
+                                      margin:EdgeInsets.fromLTRB(0, 30, 0, 20),
+                                        width: 150,
+                                        height: 286,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff77094E),
+                                            borderRadius: BorderRadius.circular(20)),
+
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 20,),
+                                            Image.network(
+                                              snapshot.data.docs[i]["image"],
+                                              height: 175, width: 350,),
+
+                                            Text(snapshot.data.docs[i]["name"],
+                                              style:   GoogleFonts.caveat(fontSize: 20,color: Colors.grey),),
+
+                                            Text(snapshot.data.docs[i]["authorname"],
+                                              style:   GoogleFonts.caveat(fontSize: 20,color: Colors.white),),
+                                            Text(
+                                                snapshot.data.docs[i]["price"],
+                                              style:   GoogleFonts.caveat(fontSize: 20,color:Colors.indigo),),
+
+                                          ],
+                                        )
+                                    );
+                            }
+                        ),
+                      ),
+                    );
+
+                }
+              }
+
+          ),
+          // bottomNavigationBar: BottomNavigationBar(items: [BottomNavigationBarItem(label: "Books", icon: Icon(Icons.book)),
+          //   BottomNavigationBarItem(label: "Authors", icon: Icon(Icons.person))],backgroundColor:Color(0xff77094E),
+          // selectedItemColor: Colors.black,
+          // unselectedItemColor: Colors.grey,),
+
+        ),
+      );
+
+  }
+}
+
