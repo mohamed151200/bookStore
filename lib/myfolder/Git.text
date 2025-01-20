@@ -1,0 +1,7 @@
+Terminal: Select Default Profile
+Select "Git Bash"
+git config --global user.name "mohamed"
+git config --global user.email "mohamedkhaledsaleh314@gmail.com"
+git config --global
+git inint
+git add .
